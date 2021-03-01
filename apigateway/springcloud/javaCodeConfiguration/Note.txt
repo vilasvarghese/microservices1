@@ -1,0 +1,275 @@
+https://www.javainuse.com/spring/cloud-gateway
+
+
+Code Configuration is almost same as property. For upgrading from property skip to 
+"Tag: CodeConfiguration"
+
+The exercise here was strongly influenced by the above 
+
+While creating the apigateway ensure to delete the 
+	parent tag
+	properties tag 
+	dependencies
+	everything else apart from the initial configuration
+	
+	
+
+An API Gateway 
+	Gateway of the 
+		application or 
+		collection of microservices. 
+External clients 
+	cannot access the microservices directly 
+	can access them only through the application gateway
+In a real world scenario an external client can be any one of the three-
+	Mobile Application
+	Desktop Application
+	External Services or third party Apps
+	anything else which is trying to hit the endpoint
+	
+Advantages of API gateway-
+	Improves security of the microservices 
+	Implement common security and filtering at the Gateway.
+	Other end points are not available for end users
+	Cross cutting concerns like 
+		authentication, 
+		monitoring/metrics
+		resiliency 
+		can be be implemented in the API Gateway 
+	Client is abstracted out from internal architecture 
+	Simplifies client interaction 
+		access only a single service for all the requirements.
+		
+Architecture of Spring Cloud Gateway
+------------------------------------
+Spring Cloud Gateway 
+	API Gateway implementation by Spring Cloud team on top of Spring reactive ecosystem. 
+	Building blocks of Spring Cloud API Gateway-
+		Route: 
+			Route the basic building block of the gateway. It consists of
+				ID
+				destination URI
+				Collection of predicates and a collection of filters
+		A route is matched if aggregate predicate is true.
+		Predicate: 
+			Similar to Java 8 Function Predicate. 
+			Using this functionality we can compare HTTP request, such as 
+				headers , 
+				url, 
+				cookies or 
+				parameters.
+			Allow/filter based on these
+		Filter: 
+			Instances of Spring Framework GatewayFilter. 
+			Using this we can modify the request or response. 
+	When the client makes a request to the Spring Cloud Gateway, the Gateway Handler Mapping first checks if the request matches a route. This matching is done using the predicates. If it matches the predicate then the request is sent to the filters.
+	
+	
+	Refer application.yml of apigateway service.
+	
+	Implementing Spring Cloud Gateway
+		Refer the url 
+			https://www.javainuse.com/spring/cloud-gateway
+			
+			
+	
+First Service
+	
+	Expose it on port 8081 and make a url /employee/message available
+	
+	 pom.xml will be as follows-
+----------------------------------------------------------- 
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.1.7.RELEASE</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.javainuse</groupId>
+	<artifactId>first-service</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<properties>
+		<java.version>1.8</java.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+	</dependencies>
+
+</project>
+----------------------------------------------------------- 
+ application.yml as follows-
+
+
+----------------------------------------------------------- 
+spring:
+  application:
+    name: first-service
+server:
+  port: 8081
+----------------------------------------------------------- 
+
+	controller
+----------------------------------------------------------- 
+package com.javainuse.controller;
+
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/employee")
+public class FirstController {
+
+	@GetMapping("/message")
+	public String test() {
+		return "Hello JavaInUse Called in First Service";
+	}
+}
+----------------------------------------------------------- 
+A simple and normal Application
+----------------------------------------------------------- 
+
+
+Second service is very similar to first 
+	Expose it on port 8082 and make a url /consumer/message available
+
+	Except application.yml and Controller - others are same.
+----------------------------------------------------------- 
+application.yml
+----------------------------------------------------------- 
+spring:
+  application:
+    name: second-service
+server:
+  port: 8082
+----------------------------------------------------------- 
+Controller
+----------------------------------------------------------- 
+package com.javainuse.controller;
+
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/consumer")
+public class SecondController {
+
+	@GetMapping("/message")
+	public String test() {
+		return "Hello JavaInUse Called in Second Service";
+	}
+
+}
+----------------------------------------------------------- 
+
+Third - gateway service
+----------------------------------------------------------- 
+	pom.xml
+----------------------------------------------------------- 
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.apigateway</groupId>
+	<artifactId>apigateway</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>apigateway</name>
+	<description>InstructionsForAPIGateway replacement</description>
+
+	<properties>
+		<java.version>1.8</java.version>
+		<spring-cloud.version>Greenwich.SR2</spring-cloud.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-gateway</artifactId>
+		</dependency>
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	<repositories>
+		<repository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>https://repo.spring.io/milestone</url>
+		</repository>
+	</repositories>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+</project>
+----------------------------------------------------------- 
+"Tag: CodeConfiguration"
+----------------------------------------------------------- 
+	application.yml
+server:
+  port: 8080
+----------------------------------------------------------- 
+Add a config file as follows
+----------------------------------------------------------- 
+package com.apigateway;
+
+import org.springframework.cloud.gateway.route.RouteLocator;
+import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class SpringCloudConfig {
+
+    @Bean
+    public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route(r -> r.path("/employee/**")
+                        .uri("http://localhost:8081/")
+                        .id("employeeModule"))
+
+                .route(r -> r.path("/consumer/**")
+                        .uri("http://localhost:8082/")
+                        .id("consumerModule"))
+                .build();
+    }
+
+}
+----------------------------------------------------------- 
+Normal springboot application file. No controller required.
+-----------------------------------------------------------
+Start all 3 services
+	localhost:8080/employee/message
+	localhost:8080/consumer/message
+	
+	localhost:8081/employee/message
+	localhost:8082/consumer/message
+----------------------------------------------------------- 
+
+
+----------------------------------------------------------- 
+----------------------------------------------------------- 
+----------------------------------------------------------- 
+----------------------------------------------------------- 
+----------------------------------------------------------- 
+----------------------------------------------------------- 

@@ -17,11 +17,11 @@ public class CollaborationController {
 	
 	@RequestMapping("/catalog/companies/{companyName}")
 	public List<EmployeeRatingCatalog> getEmployeesRating(@PathVariable String companyName){
-		CompanyEmployees compEmps = restTemplate.getForObject("http://localhost:8081/companies/"+companyName+"/employees", CompanyEmployees.class);
+		CompanyEmployees compEmps = restTemplate.getForObject("http://COMPANYSERVICE/companies/"+companyName+"/employees", CompanyEmployees.class);
 		List<Employee> empList = compEmps.getEmployeeList();
 		List<EmployeeRatingCatalog> employeesRatingList = new ArrayList<EmployeeRatingCatalog>();
 		for (Employee e : empList) {
-			Rating r = restTemplate.getForObject("http://localhost:8082/ratings/employeerating/"+e.getId(), Rating.class);
+			Rating r = restTemplate.getForObject("http://RATING/ratings/employeerating/"+e.getId(), Rating.class);
 			employeesRatingList.add(new EmployeeRatingCatalog(e, r));
 		}
 		return employeesRatingList;

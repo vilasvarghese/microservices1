@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: eurekaserver		# Application Server Name
+
+server:
+  port: 8083
+eureka:
+  client:
+    registerWithEureka: false	# With this server does not attempt to register itself. Else you get lot of error on the console
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://localhost:8083/eureka/
+# fetchRegistry: false
+# With this, we inform customers that they must not store the data of the available instances 	
+#	in their local cache. This means that they must consult the Eureka server whenever 
+#	they need to access a service. In production, this is often set to true to 
+#	expedite requests. I must comment that this cache is updated every 30 seconds by default.
