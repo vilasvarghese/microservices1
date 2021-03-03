@@ -1,0 +1,32 @@
+		Add fodency
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.12</version>
+			<scope>provided</scope>
+		</dependency>
+	
+		Open lombok.jar in eclipse
+			In Maven dependency find the jar.
+			Right click and find the location
+		Go to that location.
+		Double click on that.
+		If it finds the ide automatically it is good.
+		Else give the path of eclipse.exe
+			Run - type Eclise
+				Right click on the icon and find the path
+				Go to that path
+				Right click on that icon and find the path from properties.
+				Give this path.
+		
+		Click on Install
+		Restart Eclipse
+		Verify everything is fine..
+		Go to the eclipse folder and confirm lombok.jar is present in that folder.
+		Rebuild Eclipse project
+			Click Project - Clean - Select the project and Run
+		
+		For e.g. following is the location where i found my Eclipse.exe
+		C:\Users\<user>\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Eclipse\Eclipse Jee 2019-03.exe
+
+	Refer Employee and EmployeeController

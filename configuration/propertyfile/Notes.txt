@@ -1,0 +1,127 @@
+Reference 1: 
+	https://docs.spring.io/spring-boot/docs/2.1.8.RELEASE/reference/html/boot-features-external-config.html
+	https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-external-config
+
+1. Create a web spring boot application
+2. Define few properties in key=value pairs in application.properties.
+3. Autowire values using @Value annotation.
+		@Value("${key}")
+		
+		
+----------------------------------------------------	
+Get the war file.
+
+Steps to get the war file can be found in 
+https://crunchify.com/how-to-create-a-war-file-from-eclipse-using-maven-plugin-apache-maven-war-plugin-usage/
+
+	Define <packaging>war</packaging> under version definition.
+	
+	Right click -> Run As -> Maven build -> clean install
+
+				OR
+
+4. Refer a property from another property in the property file.
+	e.g.
+	country.message = Welcome to ${country.name}
+
+5. Go to the folder where your .war file is
+	java -jar <your service build>.war / .jar
+	
+	http://localhost:8080/hello
+	http://localhost:8080/hello1
+	
+	
+------------------------------------------------------------------------------------	
+	If you don't know where is your war/jar file, then execute mvn clean install 
+------------------------------------------------------------------------------------	
+
+
+--------------------------------------------------	
+Different ways to override the values
+-------------------------------------
+a. 	cd to the folder where you have the war.
+
+	->C:\Users\vilas\.m2\repository\com\config\configservice\0.0.1-SNAPSHOT
+	
+	->java -jar -DfirstName=Ullas configservice-0.0.1-SNAPSHOT.war
+	
+	http://localhost:8080/stateList
+
+b. Have an application.properties in the same folder as where you war/jar is.
+
+	Create a new application.properties file and define equivalent of each properties
+	java -jar <your file>.jar/.war
+
+		It will override the application.properties value with what is the there on the local machine.
+		
+
+6. Defining a default value
+	a. Remove a porperty from application.properties inside the service 
+		(not in the location where .war is present)
+		and try to start the application .
+		or build using maven
+			
+			It fails
+		
+	b. But look at the defaultValue variable in Property2Controller.
+		There is no equivalent for this in application.properties
+	
+7. List of values
+	Look at the stateList
+		A string got automatically converted to list.
+		
+		Property3Controller
+		http://localhost:8080/stateList
+		
+8. Expression
+	Remember sPel from the architecture diagram.
+	You can define a value itself as key value pairs
+	Define it like below 
+		electionRule={age: 18, citizen: 'Indian'}
+	While you use
+		@Value("#{${electionRule}}") - it can get evaluated to a Map.
+	We can return/use this Map
+	
+	Refer Property4Controller.java
+
+
+
+-------------------------------
+ConfigurationProperties
+
+Let's say you have properties like
+
+db.connection={jdb:odbc:thin,192.168.1.2,username: 'scott': password: tiger'}
+db.host=192.168.132.123
+db.port=1234
+
+All properties under this can be directly applied to a Bean
+	As can be seen in DBProperties.java
+	
+Such a file should have two configurations
+	@Configuration
+	@ConfigurationProperties("db")
+	
+This can be directly autowired (not proertified) into a class as can be seen in 
+	ConfigurationPropertyController.java
+	
+-------------------------------
+
+Such values can be directly seen by adding an actuator
+
+include below dependency in the pom.xml
+
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-actuator</artifactId>
+	</dependency>
+	
+	
+Add below property in application.properties
+
+	management.endpoints.web.exposure.include=*
+
+Restart and go to 
+	http://localhost:8080/actuator/configprops
+	
+	Copy paste this file and Search for "db"

@@ -1,0 +1,55 @@
+Reference project: employee-mvc
+
+1. Create a simple mvc web project
+
+2. Ensure that the following dependency is already present or add it.
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+
+Refer employee-mvc/pom.xml to see all dependencies
+
+3. Create a controller Pojo class
+	- Add @Controller annotation to the class.
+		Ensure NOT to give @RestController annotation.
+	
+4. Write a simple method which returns a String 
+	Annotate with @RequestMapping
+	Execute and verify
+		The request my fail.
+
+5. Modify the method to return a .jsp file. Method signature would continue to return String.
+	Create a jsp page with the same name inside src/main/webapp/
+	Add some text to it.
+	
+6. Execute it and verify that it automatically doesn't get forwarded to the jsp file.
+
+7. Add tomcat-jasper dependency
+		<dependency>
+		    <groupId>org.apache.tomcat</groupId>
+		    <artifactId>tomcat-jasper</artifactId>
+		    <version>9.0.34</version>
+		</dependency>
+
+8. Restart the server and confirm that the server forwards to the jsp page automatically.
+
+9. Read some data from request.
+	---------------------------
+	Refer to the "second" method in the Controller
+	This takes a request and response as input.
+	Gets the data from the request and add it to session.
+	Print it in the view page directly without using the object..
+	
+	
+10. Restart the server and verify that the data gets printed.
+		http://localhost:8080/second?name=Ullas
+		
+11. Induce a bean into the view.
+	---------------------------
+	Refer to mvcRequest method.
+	Create an object and add values into it.
+	Create an instance of ModelAndView class with the jsp page name mentioned in the constructor.
+	add the object to ModelAndView instance.
+	
+12. Now print the value directly in the jsp page (reference mvcview.jsp)

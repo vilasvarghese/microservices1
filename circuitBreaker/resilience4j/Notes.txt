@@ -1,0 +1,82 @@
+Pick up collaboration service
+	Since this service is now exposed on eureka.
+	Start eureka and dependent services
+	Seed the data using 
+		http://localhost:8091/seedData
+	Hit the end point
+		http://localhost:8090/catalog/companies/Hexaware
+	
+	This should now be working.
+	Bring down any service let's say rating
+	
+	Refresh
+		http://localhost:8090/catalog/companies/Hexaware
+	Now this would fail
+	
+	Let's add a circuit breaker
+	
+Add the following in pom.xml
+------------------------------------------------------------------------
+N.B:
+	#Ensure to retain version even if you are getting comments.
+	#Without this failure rate may not get updated.
+
+		<!-- https://mvnrepository.com/artifact/io.github.resilience4j/resilience4j-circuitbreaker -->
+		<dependency>
+		    <groupId>io.github.resilience4j</groupId>
+		    <artifactId>resilience4j-spring-boot2</artifactId>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator -->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-actuator</artifactId>
+		    <version>2.2.1.RELEASE</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-aop -->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-aop</artifactId>
+		    <version>2.2.6.RELEASE</version>
+		</dependency>
+
+------------------------------------------------------------------------
+
+
+Update the collaboration controller as follows
+
+------------------------------------------------------------------------
+1. Add an annotation to the method were we wan't to induce circuit breaker
+	@CircuitBreaker(name = "COMPANY-RATING-COLLABORATION", fallbackMethod = "fallbackEmpRating")
+
+2. 	Add a fallback method as mentioned below.
+	The signature of this method should be same as what initial method.
+	name of this method should be same as what is defined in fallbackMethod.
+	An additional Exception is passed to this class.
+		
+		We can either return an error or return a cached response.
+		
+	public List<EmployeeRatingCatalog> fallbackEmpRating(@PathVariable String companyName, Exception e){
+		List<EmployeeRatingCatalog> employeesRatingList = new ArrayList<EmployeeRatingCatalog>();
+		employeesRatingList.add(
+				new EmployeeRatingCatalog(
+						new Employee(1, "Vilas", 10000, "Oracle"), new Rating("Vilas", 5)));
+		
+		return employeesRatingList;
+	}
+
+
+------------------------------------------------------------------------
+Restart the service and hit the end point
+		http://localhost:8090/catalog/companies/Hexaware
+
+	Now it should be responding with the cached response - hard coded in this case.
+	
+	Try hitting the following from postman.
+	http://localhost:8090/actuator/health
+	
+	Refresh below url couple of times
+	http://localhost:8090/catalog/companies/Hexaware
+	
+	See that "failedCalls":  keeps increasing
+	
+	Once this crosses 5, the circuit would be OPEN.
