@@ -1,5 +1,79 @@
 We are inducing headers through property file beyond just adding custom filter
 Hence this is better than the tutorial 
 	https://www.javainuse.com/spring/cloud-filter
+
+---------------------------------------------------------------------	
+			Gateway configuration
+---------------------------------------------------------------------	
+1. Create a spring gateway project
+
+2. Make the following changes in the pom.xml
+	a. Remove <parent> entry and spring-boot-starter-test entry
+	b. Add following into the properties
+				<spring-cloud.version>Greenwich.SR2</spring-cloud.version>
+
+	Properties should look as follows
+	<properties>
+		<java.version>1.8</java.version>
+		<spring-cloud.version>Greenwich.SR2</spring-cloud.version>
+	</properties>
 	
+	c. Add repo.
+	<repositories>
+		<repository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>https://repo.spring.io/milestone</url>
+		</repository>
+	</repositories>
 	
+3. Add the following into application.yml file
+
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: employeeModule
+        uri: http://localhost:8081/
+        predicates:
+        - Path=/employee/**
+        filters:
+        - CustomFilter
+        - AddRequestHeader=first-request, first-request-header
+        - AddResponseHeader=first-response, first-response-header
+      - id: consumerModule
+        uri: http://localhost:8082/
+        predicates:
+        - Path=/consumer/**
+        filters:
+        - CustomFilter
+        - AddRequestHeader=second-request, second-request-header
+        - AddResponseHeader=second-response, second-response-header
+		
+		
+4. Create a CustomFilter as mentioned in the folder.		
+
+
+---------------------------------------------------------------------
+			Gateway First Service
+---------------------------------------------------------------------
+1. Create a spring web project
+
+2. Add the following to application.properties
+spring:
+  application:
+    name: apigatewayfirstservice
+server:
+  port: 8081
+
+
+
+
+
+
+---------------------------------------------------------------------
+			Gateway Second Service
+---------------------------------------------------------------------

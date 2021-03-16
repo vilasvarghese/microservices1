@@ -13,5 +13,4 @@ public class MyApplication {
 		Employee emp = 	context.getBean(Employee.class);
 		emp.print();
 	}
-
 }

@@ -11,18 +11,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.companyservice.Company;
+import com.companyservice.CompanyService;
 
 @RestController
 public class EmployeeController {
 
 	@Autowired
 	private EmployeeService employeeService;
+	@Autowired
+	private CompanyService companyService;
 	
 	@RequestMapping("/companies/{companyName}/employees")
-	public List<Employee> getEmployees(@PathVariable String companyName){
-		return employeeService.getAllEmployees(companyName);
+	public CompanyEmployees getEmployees(@PathVariable String companyName){
+		CompanyEmployees compEmployees = new CompanyEmployees();
+		compEmployees.setEmployeeList(employeeService.getAllEmployees(companyName));	
+		return compEmployees;
 	}
-	
 	
 	@RequestMapping("/companies/{companyName}/employees/{id}")
 	public Optional<Employee> getEmployee(@PathVariable String companyName, @PathVariable int id){
@@ -52,4 +56,22 @@ public class EmployeeController {
 		employeeService.deleteEmployee(id);
 	}
 	
+	@RequestMapping(method=RequestMethod.GET, value="/seedData")
+	public void seedData(){
+		companyService.addCompany(new Company("Hexaware", "Hexaware India Pvt Ltd", 22000));
+		companyService.addCompany(new Company("Apple", "Apple India Pvt Ltd", 10000));
+		companyService.addCompany(new Company("Infosys", "Infosys India Pvt Ltd", 5000));
+		
+		employeeService.createEmployee(new Employee(1, "Sajal from Hexaware", 1000000, "Hexaware"));
+		employeeService.createEmployee(new Employee(2, "Sajal always from Hexaware", 2000000, "Hexaware"));
+		employeeService.createEmployee(new Employee(3, "Sajal is also from Hexaware", 3000000, "Hexaware"));
+		employeeService.createEmployee(new Employee(4, "Rehman pillar of Hexaware", 4000000, "Hexaware"));
+
+		employeeService.createEmployee(new Employee(5, "Akash Shah", 40000, "Apple"));
+		employeeService.createEmployee(new Employee(6, "Lakhvinder Singh", 1000, "Apple"));
+		employeeService.createEmployee(new Employee(7, "Steve Jobs", 10, "Apple"));
+
+		employeeService.createEmployee(new Employee(8, "Bill Gates", 1, "Infosys"));
+		employeeService.createEmployee(new Employee(9, "Trump the president", 2, "Infosys"));
+	}
 }

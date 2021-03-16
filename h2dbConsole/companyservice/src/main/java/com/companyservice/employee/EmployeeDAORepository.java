@@ -7,5 +7,6 @@ import org.springframework.data.repository.CrudRepository;
 
 
 public interface EmployeeDAORepository extends CrudRepository<Employee, String>{
+
 	public List<Employee> findByCompanyName(String companyName);
 }
