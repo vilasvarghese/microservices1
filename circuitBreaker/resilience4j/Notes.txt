@@ -69,14 +69,57 @@ Update the collaboration controller as follows
 Restart the service and hit the end point
 		http://localhost:8090/catalog/companies/Hexaware
 
+
+Now let's learn half opened state
+---------------------------------
+
+Add the following properties in application.yml of collaboration service.
+-----------------------------------------------------
+
+#Reference: https://github.com/resilience4j/resilience4j-spring-boot2-demo/blob/master/src/main/resources/application.yml
+resilience4j.circuitbreaker:
+  configs:
+    default:                       #Instead of this we can use instances: and mention a particular microservice name. The name should match with the name in @CircuitBreaker
+      registerHealthIndicator: true
+      eventConsumerBufferSize: 10
+      automaticTransitionFromOpenToHalfOpenEnabled: true #Start short circuiting for 50% requests. Don't even make calls.'
+      failureRateThreshold: 50      #Maximum failure rate threashhold in percentage. After this short circuiting will start.
+      minimumNumberOfCalls: 5       #After so many call failure, the short circuiting calculation would start.
+      permittedNumberOfCallsInHalfOpenState: 3
+      slidingWindowSize: 10
+      waitDurationInOpenState: 5s
+      slidingWindowType: COUNT_BASED
+# Once you start recording an exception - those exceptions won't be considered as failures
+#      recordExceptions:
+#        - org.springframework.web.client.HttpServerErrorException
+#        - java.util.concurrent.TimeoutException
+#        - java.io.IOException
+
+#Below are the actuator related configuration. Without the below configuration actuator and fallback would work but we will not be able to see it up and running when we hit the endpoint actuator/health
+
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+-----------------------------------------------------------------	  
+Bounce the collaboration service
+
+
 	Now it should be responding with the cached response - hard coded in this case.
 	
 	Try hitting the following from postman.
 	http://localhost:8090/actuator/health
 	
-	Refresh below url couple of times
+	Refresh below url 5+ of times
 	http://localhost:8090/catalog/companies/Hexaware
 	
 	See that "failedCalls":  keeps increasing
 	
-	Once this crosses 5, the circuit would be OPEN.
+	Once this crosses 5, the circuit would be HALF_OPEN.
