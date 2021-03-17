@@ -1,6 +1,7 @@
 package com.apigateway;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -9,7 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class FirstController {
 
 	@GetMapping("/message")
-	public String test() {
-		return "Hello Called in First Service";
+	public String test(@RequestHeader("first-request") String header) {
+		System.out.println("header "+header);
+		return "Hello Called in First Service "+header;
 	}
 }

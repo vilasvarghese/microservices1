@@ -68,12 +68,13 @@ Spring Cloud Gateway
 			https://www.javainuse.com/spring/cloud-gateway
 			
 			
-	
-First Service
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~	
+First Service is a simple spring boot application which is reading some data from the RequestHeader
 	
 	Expose it on port 8081 and make a url /employee/message available
 	
 	 pom.xml will be as follows-
+		of a simple spring web application
 ----------------------------------------------------------- 
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -124,16 +125,18 @@ import org.springframework.web.bind.annotation.*;
 public class FirstController {
 
 	@GetMapping("/message")
-	public String test() {
-		return "Hello JavaInUse Called in First Service";
+	public String test(@RequestHeader("first-request") String header) {
+		System.out.println("header "+header);
+		return "Hello Called in First Service "+header;
 	}
+
 }
 ----------------------------------------------------------- 
 A simple and normal Application
 ----------------------------------------------------------- 
 
 
-Second service is very similar to first 
+Second service is very similar to first (spring boot web application reading from request header
 	Expose it on port 8082 and make a url /consumer/message available
 
 	Except application.yml and Controller - others are same.
@@ -157,8 +160,9 @@ import org.springframework.web.bind.annotation.*;
 public class SecondController {
 
 	@GetMapping("/message")
-	public String test() {
-		return "Hello JavaInUse Called in Second Service";
+	public String test(@RequestHeader("second-request") String header) {
+		System.out.println("header "+header);
+		return "Hello Called in Second Service "+header;
 	}
 
 }
@@ -219,10 +223,13 @@ Third - gateway service
 	</build>
 </project>
 
+
+We will induce the request and response header in the application.yml file
 ----------------------------------------------------------- 
 	application.yml
 server:
   port: 8080
+
 
 spring:
   cloud:
@@ -232,10 +239,16 @@ spring:
         uri: http://localhost:8081/
         predicates:
         - Path=/employee/**
+        filters:
+        - AddRequestHeader=first-request, first-request-header
+        - AddResponseHeader=first-response, first-response-header
       - id: consumerModule
         uri: http://localhost:8082/
         predicates:
         - Path=/consumer/**
+        filters:
+        - AddRequestHeader=second-request, second-request-header
+        - AddResponseHeader=second-response, second-response-header
 ----------------------------------------------------------- 
 Normal springboot application file. No controller required.
 -----------------------------------------------------------
@@ -245,6 +258,9 @@ Start all 3 services
 	
 	localhost:8081/employee/message
 	localhost:8082/consumer/message
+	
+	
+Also check it in postman to see the response attributes	
 ----------------------------------------------------------- 
 ----------------------------------------------------------- 
 ----------------------------------------------------------- 
