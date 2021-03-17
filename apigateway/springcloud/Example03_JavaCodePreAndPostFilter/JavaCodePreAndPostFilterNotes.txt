@@ -7,7 +7,9 @@ Hence this is better than the tutorial
 ---------------------------------------------------------------------	
 1. Create a spring gateway project
 
-2. Make the following changes in the pom.xml
+2. Preferably copy the pom.xml 
+			or
+	Make the following changes in the pom.xml
 	a. Remove <parent> entry and spring-boot-starter-test entry
 	b. Add following into the properties
 				<spring-cloud.version>Greenwich.SR2</spring-cloud.version>
@@ -31,31 +33,43 @@ Hence this is better than the tutorial
 
 server:
   port: 8080
-
-spring:
-  cloud:
-    gateway:
-      routes:
-      - id: employeeModule
-        uri: http://localhost:8081/
-        predicates:
-        - Path=/employee/**
-        filters:
-        - CustomFilter
-        - AddRequestHeader=first-request, first-request-header
-        - AddResponseHeader=first-response, first-response-header
-      - id: consumerModule
-        uri: http://localhost:8082/
-        predicates:
-        - Path=/consumer/**
-        filters:
-        - CustomFilter
-        - AddRequestHeader=second-request, second-request-header
-        - AddResponseHeader=second-response, second-response-header
 		
 		
-4. Create a CustomFilter as mentioned in the folder.		
+4. Add Application file 
 
+5. Code Spring Cloud config as follows
+
+----------------------------------------------------------------
+package com.apigateway;
+
+import org.springframework.cloud.gateway.route.RouteLocator;
+import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class SpringCloudConfig {
+
+	@Bean
+	public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
+		return builder.routes()
+				.route(r -> r.path("/employee/**")
+				//Pre and Post Filters provided by Spring Cloud Gateway
+						.filters(f -> f.addRequestHeader("first-request", "first-request-header")
+								.addResponseHeader("first-response", "first-response-header"))
+						.uri("http://localhost:8081/")
+						.id("employeeModule"))
+
+				.route(r -> r.path("/consumer/**")
+				//Pre and Post Filters provided by Spring Cloud Gateway
+						.filters(f -> f.addRequestHeader("second-request", "second-request-header")
+								.addResponseHeader("second-response", "second-response-header"))
+						.uri("http://localhost:8082/")
+						.id("consumerModule"))
+				.build();
+	}
+}		
+----------------------------------------------------------------
 
 ---------------------------------------------------------------------
 			Gateway First Service
@@ -91,8 +105,6 @@ public class FirstController {
 }
 
 
-
-
 ---------------------------------------------------------------------
 			Gateway Second Service
 ---------------------------------------------------------------------
@@ -105,6 +117,7 @@ spring:
     name: apigatewaysecondservice
 server:
   port: 8082
+
   
 3. Code the second controller as follows 
 package com.apigateway;
@@ -125,4 +138,13 @@ public class SecondController {
 	}
 }
 
+
+
+----------------------------------
+
+Go to the browser and hit
+	localhost:8080/employee/message
+Go to the postman and hit
+	 localhost:8080/employee/message
+	Verify the response header
 

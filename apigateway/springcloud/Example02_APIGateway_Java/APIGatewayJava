@@ -1,0 +1,175 @@
+Reference: https://www.javainuse.com/spring/cloud-gateway
+
+
+Create two spring boot application.
+
+First Spring boot application
+1. Create a simple web spring boot application
+2. Add a simple Controller as follows
+-------------------------------------------------
+package com.apigateway;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/employee")
+public class FirstController {
+
+	@GetMapping("/message")
+	public String test() {
+		return "Hello Called in First Service ";
+	}
+}
+-----------------------------------------------
+3. Make it listen on port 8081
+Update application.yml to
+
+spring:
+  application:
+    name: first-service
+server:
+  port: 8081
+  
+  
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Second Spring boot application
+1. Create a simple web spring boot application
+2. Add a simple Controller as follows
+-------------------------------------------------
+package com.apigateway;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/consumer")
+public class SecondController {
+
+	@GetMapping("/message")
+	public String test() {
+		return "Hello Called in Second Service ";
+	}
+}
+-----------------------------------------------
+3. Make it listen on port 8081
+Update application.yml to
+
+spring:
+  application:
+    name: apigatewaysecondservice
+server:
+  port: 8082
+  
+  
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Create an api gateway
+
+1. Create a spring cloud gateway project
+Ensure that the pom.xml looks like below
+
+-----------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.javainuse</groupId>
+	<artifactId>cloud-gateway-service</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>gateway-service</name>
+
+	<properties>
+		<java.version>1.8</java.version>
+		<spring-cloud.version>Greenwich.SR2</spring-cloud.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-gateway</artifactId>
+		</dependency>
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	<repositories>
+		<repository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>https://repo.spring.io/milestone</url>
+		</repository>
+	</repositories>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
+------------------------------------------------
+
+
+2. Ensure to have a SpringBootApplication file
+
+3. Make the following entry in application.properties file.
+
+server:
+  port: 8080
+  
+4. Create a following configuration file
+
+------------------------------------------
+package com.apigateway;
+
+import org.springframework.cloud.gateway.route.RouteLocator;
+import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class SpringCloudConfig {
+    @Bean
+    public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route(r -> r.path("/employee/**")
+                        .uri("http://localhost:8081/")
+                        .id("employeeModule"))
+
+                .route(r -> r.path("/consumer/**")
+                        .uri("http://localhost:8082/")
+                        .id("consumerModule"))
+                .build();
+    }
+}
+------------------------------------------  
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Execution
+
+Start all 3 services
+
+Access
+	http://localhost:8080/employee/message
+
+	http://localhost:8080/consumer/message
+
+		
+		
+		
