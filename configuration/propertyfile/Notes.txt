@@ -45,6 +45,8 @@ a. 	cd to the folder where you have the war.
 	
 	->java -jar -DfirstName=Ullas configservice-0.0.1-SNAPSHOT.war
 	
+	http://localhost:8080/hello
+	http://localhost:8080/hello1
 	http://localhost:8080/stateList
 
 b. Have an application.properties in the same folder as where you war/jar is.
@@ -125,3 +127,25 @@ Restart and go to
 	http://localhost:8080/actuator/configprops
 	
 	Copy paste this file and Search for "db"
+	
+
+
+-------------------------------
+
+Create our own profile
+----------------------
+Spring can support multiple profiles
+
+1. Copy paste and create a new application-dev.properties
+Modify some of the properties
+
+2. Add the below in application.properties
+spring.profiles.active: dev
+
+Restart the server
+
+Hit the various end points.
+
+java -jar configservice-0.0.1-SNAPSHOT.war --spring.profiles.active=dev
+-------------------------------------------
+
