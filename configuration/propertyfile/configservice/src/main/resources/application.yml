@@ -2,6 +2,4 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"
-#Added for Spring boot actuator. * will expose all config prop values
-#http://localhost:8080/actuator/configprops        
+        include: "*"      

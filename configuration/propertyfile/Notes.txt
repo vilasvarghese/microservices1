@@ -17,7 +17,8 @@ https://crunchify.com/how-to-create-a-war-file-from-eclipse-using-maven-plugin-a
 	Define <packaging>war</packaging> under version definition.
 	
 	Right click -> Run As -> Maven build -> clean install
-
+			OR
+	mvn clean install
 				OR
 
 4. Refer a property from another property in the property file.
@@ -146,7 +147,12 @@ Restart the server
 
 Hit the various end points.
 
+
+Another way to inject profile is as follows.
+
 java -jar configservice-0.0.1-SNAPSHOT.war --spring.profiles.active=dev
+
+
 -------------------------------------------
 
 
@@ -216,7 +222,7 @@ Add @EnableConfigServer in application file.
 
 Add the following porperty in application.properties
 
-spring.cloud.config.server.git.uri=D:\PraiseTheLord\HSBGInfotech\Others\vilas\microservices1\configuration\propertyfile\configrepo
+spring.cloud.config.server.git.uri=D:\\PraiseTheLord\\HSBGInfotech\\Others\\vilas\\microservices1\\configuration\\propertyfile\\configrepo
 
 server.port=8888
 
@@ -237,3 +243,22 @@ URL:
 	
 	e.g.
 	http://localhost:8888/application/default
+	
+	
+-------------------------
+
+Create a new Spring config client and web project
+Add actuator also to it.
+
+Add following to the property file
+spring.cloud.config.uri:http://localhost:8888
+server.port = 9091
+management.endpoints.web.exposure.include = "*"
+
+
+Copy the DbProperties class from service.
+Try to use a value of the same in controller.
+
+Further read 
+Securing config server
+	https://medium.com/@susindaperera/securing-spring-cloud-config-server-eac7b46f3e41
