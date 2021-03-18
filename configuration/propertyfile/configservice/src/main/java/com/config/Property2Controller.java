@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class Property2Controller {
 
 	
-	@Value("{mysurname: Varghese}")//This is the way to define a default value to property.
+	@Value("${mysurname: Varghese}")//This is the way to define a default value to property.
 	private String mysurname;
 	
 	@RequestMapping("/default")
