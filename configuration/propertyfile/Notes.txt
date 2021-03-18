@@ -222,7 +222,7 @@ Add @EnableConfigServer in application file.
 
 Add the following porperty in application.properties
 
-spring.cloud.config.server.git.uri=D:\\PraiseTheLord\\HSBGInfotech\\Others\\vilas\\microservices1\\configuration\\propertyfile\\configrepo
+spring.cloud.config.server.git.uri=D:\\conig
 
 server.port=8888
 
