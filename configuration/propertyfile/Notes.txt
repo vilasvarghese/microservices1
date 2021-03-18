@@ -259,6 +259,126 @@ management.endpoints.web.exposure.include = "*"
 Copy the DbProperties class from service.
 Try to use a value of the same in controller.
 
+
+
+
+---------------------------------
+client
+---------------------------------
+
+Create a spring boot config client project
+
+and add following dependency
+		<dependency>
+		  <groupId>org.springframework.cloud</groupId>
+		  <artifactId>spring-cloud-starter-bootstrap</artifactId>
+		</dependency>
+
+why?
+Refer https://stackoverflow.com/questions/65430810/config-client-is-not-working-in-spring-boot
+
+pom.xml would look as follows
+-------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.4.3</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.configclient</groupId>
+	<artifactId>configclient</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>configclient</name>
+	<description>Instructions For Config Client service</description>
+	<properties>
+		<java.version>1.8</java.version>
+		<spring-cloud.version>2020.0.1</spring-cloud.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator -->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+		  <groupId>org.springframework.cloud</groupId>
+		  <artifactId>spring-cloud-starter-bootstrap</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
+
+
+
+------------------
+
+
+Create a bootstrap.yml file as follows
+------------------
+spring:
+  application:
+    name: configclient
+  profiles:
+    active: default
+  cloud:
+    config:
+      uri: http://localhost:8888
+------------------
+
+application.properties would look as follows
+
+server.port=8091
+
+Now we can read the properties as if it is a local application.properties 
+
+implement java code to do the same.
+
+Reference 
+D:\PraiseTheLord\HSBGInfotech\Others\vilas\microservices1\configuration\propertyfile
+
+	configserver 
+	configclient
+
+
+
+
 Further read 
 Securing config server
 	https://medium.com/@susindaperera/securing-spring-cloud-config-server-eac7b46f3e41
