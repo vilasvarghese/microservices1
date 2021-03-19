@@ -1,4 +1,4 @@
-		Add fodency
+		Add below dependency
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -29,4 +29,5 @@
 		For e.g. following is the location where i found my Eclipse.exe
 		C:\Users\<user>\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Eclipse\Eclipse Jee 2019-03.exe
 
-	Refer Employee and EmployeeController
+	Refer D:\PraiseTheLord\HSBGInfotech\Others\vilas\microservices\FirstSpringBoot\src\main\java\com\example\FirstSpringBoot
+	
