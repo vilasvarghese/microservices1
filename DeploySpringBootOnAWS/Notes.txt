@@ -1,0 +1,96 @@
+Creating a spring boot application for external tomcat
+
+
+
+Create a spring boot start web applcation..
+
+1. pom.xml
+
+	Normal
+	------
+		<parent>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-parent</artifactId>
+			<version>2.4.4</version>
+			<relativePath /> <!-- lookup parent from repository -->
+		</parent>
+
+		<groupId>com.helloworld</groupId>
+		<artifactId>helloworld</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<packaging>war</packaging>
+		<name>helloworld</name>
+		<description>Instructions For Hello World service</description>
+		<properties>
+			<java.version>1.8</java.version>
+		</properties>
+
+	N.B: 
+		The packaging should be war
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+
+	New additons
+	-------------
+			<!-- Instruct tomcat not to use inbuild tomcat server -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-tomcat</artifactId>
+				<scope>provided</scope>
+			</dependency>		
+
+	N.B: tomcat is mentioned to be provided. So tomcat in spring boot need not be picked.
+
+
+2. In the controller
+	
+	a. 
+	
+	@SpringBootApplication
+	public class HelloworldApplication extends SpringBootServletInitializer  
+	
+	N.B: Note the extension
+	
+	b. 	
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+		// TODO Auto-generated method stub
+		return builder.sources(HelloworldApplication.class);//super.configure(builder);
+	}
+
+	N.B: Note the overide configure method. This also binds to the current class.
+	
+3. Create a normal controller
+
+	
+
+a. Get an ec2 centos instance
+b. Install java
+		[yum update -y]
+		yum install java-1.8.0-openjdk
+		java -version
+		javac
+		
+		If path is not set - refer https://www.liquidweb.com/kb/install-java-8-on-centos-7/
+
+c. Install tomcat
+	mkdir /usr/local/tomcat
+	curl  https://downloads.apache.org/tomcat/tomcat-8/v8.5.64/bin/apache-tomcat-8.5.64.tar.gz -O /tmp/tomcat.tar.gz
+	cd /tmp
+	tar xvfz tomcat.tar.gz
+	 cp -Rv /tmp/apache-tomcat-8.5.64/* /usr/local/tomcat/
+	 
+	From powershell in local machine
+		 scp -i C:\Users\vilas\Downloads\vilas.pem .\helloworld-0.0.1-SNAPSHOT.war centos@3.17.61.235:/home/centos
+	
+	mv /home/centos/helloworld-0.0.1-SNAPSHOT.war /usr/local/tomcat/webapps
+	/usr/local/tomcat/bin/catalina.sh run
+	
+3. Access it on browser
+	http://<ip>:8080/<artifactId>-version/helloworld
+	
+	e.g. http://3.17.61.235:8080/helloworld-0.0.1-SNAPSHOT/hello
