@@ -79,7 +79,7 @@ b. Install java
 
 c. Install tomcat
 	mkdir /usr/local/tomcat
-	curl  https://downloads.apache.org/tomcat/tomcat-8/v8.5.64/bin/apache-tomcat-8.5.64.tar.gz -O /tmp/tomcat.tar.gz
+	curl  https://downloads.apache.org/tomcat/tomcat-8/v8.5.64/bin/apache-tomcat-8.5.64.tar.gz -o /tmp/tomcat.tar.gz
 	cd /tmp
 	tar xvfz tomcat.tar.gz
 	 cp -Rv /tmp/apache-tomcat-8.5.64/* /usr/local/tomcat/

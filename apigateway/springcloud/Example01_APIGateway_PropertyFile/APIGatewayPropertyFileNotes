@@ -56,7 +56,7 @@ public class SecondController {
 	}
 }
 -----------------------------------------------
-3. Make it listen on port 8081
+3. Make it listen on port 8082
 Update application.yml to
 
 spring:
