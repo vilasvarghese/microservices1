@@ -266,14 +266,7 @@ Try to use a value of the same in controller.
 client
 ---------------------------------
 
-Create a spring boot config client project
-
-and add following dependency
-		<dependency>
-		  <groupId>org.springframework.cloud</groupId>
-		  <artifactId>spring-cloud-starter-bootstrap</artifactId>
-		</dependency>
-
+Create a spring boot config client project with dependencies mentioned in the pom.xml
 why?
 Refer https://stackoverflow.com/questions/65430810/config-client-is-not-working-in-spring-boot
 
@@ -297,6 +290,7 @@ pom.xml would look as follows
 	<properties>
 		<java.version>1.8</java.version>
 		<spring-cloud.version>2020.0.1</spring-cloud.version>
+		<!--spring-cloud.version>Hoxton.SR1</spring-cloud.version-->
 	</properties>
 	<dependencies>
 		<dependency>
