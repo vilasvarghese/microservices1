@@ -228,7 +228,8 @@ server.port=8888
 
 -----------------
 Create a new directory
-Copy the application.properties file inside
+Copy the application.properties file from server in this project inside
+There are configurations in it.. So copying any application.properties may not solve the problem.
 do 
 	git init
 	git add *
