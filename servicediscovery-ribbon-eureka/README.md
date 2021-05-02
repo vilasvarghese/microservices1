@@ -59,3 +59,14 @@ Controller should
 	
 	Hit the url and keep refreshing few times to see the magic.
 	
+	
+### For Ribbon only without Eureka (Eureka Server or client).
+Concept Reference: https://www.baeldung.com/spring-cloud-rest-client-with-netflix-ribbon	
+Implementation Reference: /microservices1\servicediscovery-ribbon-eureka\ribbon-only-client
+	N.B: 
+		Eureka client and server both are not required.
+		different server instance needs to be hardcoded in the application.properties/yml
+		The producer name (PAYMENT-SERVICE) needs to match with the application name.
+		
+	
+		
