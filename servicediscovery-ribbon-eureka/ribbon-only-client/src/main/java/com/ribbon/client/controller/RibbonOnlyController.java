@@ -13,9 +13,9 @@ import org.springframework.cloud.netflix.ribbon.RibbonClient;
 @RestController
 public class RibbonOnlyController {
 	
-	@Autowired
+	/*@Autowired
 	private LoadBalancerClient loadBalancer;
-	
+	*/
 	@Autowired
 	private RestTemplate template;
 
@@ -27,13 +27,13 @@ public class RibbonOnlyController {
 		
         return template.getForObject(url, String.class);	
     }
-	
+	/*
 	public String getUrl() {
 		ServiceInstance serviceInstance=loadBalancer.choose("PAYMENT-SERVICE");
 		System.out.println(serviceInstance.getUri());
 		String baseUrl=serviceInstance.getUri().toString();
 		baseUrl=baseUrl+"/payment-provider/payNow/";
 		return baseUrl;
-	}
+	}*/
 
 }

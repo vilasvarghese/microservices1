@@ -7,7 +7,7 @@ eureka:
   instance:
     hostname: localhost
 server:
-  port: 0
+  port: 6161
 spring:
   application:
     name: PAYMENT-SERVICE

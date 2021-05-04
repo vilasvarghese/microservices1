@@ -18,11 +18,13 @@ public class RibbonConfiguration {
 
     @Bean
     public IPing ribbonPing(IClientConfig config) {
+    	System.out.println("Inside Ribbon Ping "+config);
         return new PingUrl();
     }
 
     @Bean
     public IRule ribbonRule(IClientConfig config) {
-        return new WeightedResponseTimeRule();
+       	System.out.println("Inside Ribbon Rule "+config);
+    	return new WeightedResponseTimeRule();
     }
 }
