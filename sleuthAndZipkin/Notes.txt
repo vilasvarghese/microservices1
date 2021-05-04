@@ -1,0 +1,5 @@
+https://www.javainuse.com/spring/cloud-sleuth
+
+zipkin jar download from : https://search.maven.org/remote_content?g=io.zipkin.java&a=zipkin-server&v=LATEST&c=exec
+
+My version can be found at D:\software
