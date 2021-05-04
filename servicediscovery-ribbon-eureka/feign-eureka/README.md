@@ -1,18 +1,22 @@
 # feign-eureka
 Example of using feign with eureka
 
-Assumes eureka (from [spring-cloud-samples](https://github.com/spring-cloud-samples/eureka)) is running on http://localhost:8761
+Eureka server should be running on http://localhost:8761
 
 ## building
 
-`mvnw package`
+mvn clean install
 
 ## hello server
 
 run `java -jar server/target/feign-eureka-hello-server-0.0.1-SNAPSHOT.jar`
 
-verify it is functioning at [http://localhost:7111](http://localhost:7111)
-
+verify 
+	it is functioning at 
+		[http://localhost:7111](http://localhost:7111)
+	Eureka is listing
+		HelloServer
+		
 You should see `Hello World: HelloServer:myhostname:7111`
 
 ## hello client

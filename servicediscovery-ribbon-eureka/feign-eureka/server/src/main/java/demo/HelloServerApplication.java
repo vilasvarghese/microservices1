@@ -31,6 +31,11 @@ public class HelloServerApplication {
 				.getHost() + ":" + selectedInstance.getPort();
 	}
 
+	@RequestMapping("/vilasp")
+	public String vilasp() {
+		return "Vilas: " + new Random().toString();
+	}
+	
 	public static void main(String[] args) {
 		SpringApplication.run(HelloServerApplication.class, args);
 	}

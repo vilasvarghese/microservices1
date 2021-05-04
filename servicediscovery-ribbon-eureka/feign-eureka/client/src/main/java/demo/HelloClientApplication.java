@@ -26,6 +26,12 @@ public class HelloClientApplication {
 	public String hello() {
 		return client.hello();
 	}
+	
+	@RequestMapping("/vilas")
+	public String vilas() {
+		return client.vilasp();
+	}
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(HelloClientApplication.class, args);
@@ -35,5 +41,8 @@ public class HelloClientApplication {
 	interface HelloClient {
 		@RequestMapping(value = "/", method = GET)
 		String hello();
+		
+		@RequestMapping(value = "/vilasp", method = GET)
+		String vilasp();
 	}
 }

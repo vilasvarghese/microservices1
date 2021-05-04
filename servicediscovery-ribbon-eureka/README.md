@@ -69,4 +69,11 @@ Implementation Reference: /microservices1\servicediscovery-ribbon-eureka\ribbon-
 		The producer name (PAYMENT-SERVICE) needs to match with the application name.
 		
 	
-		
+###Feign
+Feign has two implementation in this repo.
+1. A feign client talking to an external application without Eureka
+	Tutorial reference: https://www.youtube.com/watch?v=_MMf2SvNqxo
+	Implementation reference: microservices1\servicediscovery-ribbon-eureka\spring-cloud-feign\README.md
+	
+2. A feign client talking to an internal producer using Eureka
+	Implementation reference: servicediscovery-ribbon-eureka\feign-eureka\README.md
