@@ -1,5 +1,5 @@
 server:
   port: 9091
-spring:
-  application:
-    name: PAYMENT-SERVICE
+#spring:
+#  application:
+#    name: PAYMENT-SERVICE - It is good to keep this name same as what client will to help developers understand that the service is same.
