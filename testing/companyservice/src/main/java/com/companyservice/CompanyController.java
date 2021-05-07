@@ -17,6 +17,11 @@ public class CompanyController {
 
 	@Autowired
 	private CompanyService companyService;
+	
+	@Autowired
+	public CompanyController(Object o) {
+		
+	}
 
 	@RequestMapping("/companies")
 	public List<Company> getCompanies() {
@@ -31,14 +36,6 @@ public class CompanyController {
 		 */
 
 	}
-
-	@RequestMapping("/helloInCompanies")
-	public String getHello() throws Exception{
-		if (1==1)
-			throw new Exception("Exception from hello in provider");
-		return "Hello";
-	}
-
 	
 	@RequestMapping(method=RequestMethod.POST, value="/companies")
 	public void addCompany(@RequestBody Company company) {

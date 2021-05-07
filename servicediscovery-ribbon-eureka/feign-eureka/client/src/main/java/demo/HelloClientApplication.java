@@ -12,13 +12,21 @@ import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /**
- * @author Spencer Gibb
+ * @modifiedBy Vilas Varghese
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-@RestController
 @EnableFeignClients
 public class HelloClientApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(HelloClientApplication.class, args);
+	}
+
+}
+
+@RestController
+class HelloController{
 	@Autowired
 	HelloClient client;
 
@@ -31,18 +39,14 @@ public class HelloClientApplication {
 	public String vilas() {
 		return client.vilasp();
 	}
+	
+}
 
-
-	public static void main(String[] args) {
-		SpringApplication.run(HelloClientApplication.class, args);
-	}
-
-	@FeignClient("HelloServer")
-	interface HelloClient {
-		@RequestMapping(value = "/", method = GET)
-		String hello();
-		
-		@RequestMapping(value = "/vilasp", method = GET)
-		String vilasp();
-	}
+@FeignClient("HelloServer")
+interface HelloClient {
+	@RequestMapping(value = "/", method = GET)
+	String hello();
+	
+	@RequestMapping(value = "/vilasp", method = GET)
+	String vilasp();
 }

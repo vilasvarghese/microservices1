@@ -29,10 +29,7 @@ public class EmployeeController {
 	}
 	
 	@RequestMapping("/companies/{companyName}/employees/{id}")
-	public Optional<Employee> getEmployee(@PathVariable String companyName, @PathVariable int id) throws Exception{
-		if (1==1)
-			throw new Exception("Testing Hystrix");
-		
+	public Optional<Employee> getEmployee(@PathVariable String companyName, @PathVariable int id){
 		Optional<Employee> optonalEmp = employeeService.getEmployee(id)	;
 		return optonalEmp;
 	}
