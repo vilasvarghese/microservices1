@@ -1,0 +1,20 @@
+Install ftp server on linux
+https://phoenixnap.com/kb/how-to-setup-ftp-server-install-vsftpd-centos-7
+
+how to upload file to ftp server from windows
+	ftp ip
+	enter user/pwd
+	
+	upload one file
+		put filename
+	upload multiple file
+		mput filename
+	
+	lcd - on local machine
+	
+	download one file
+		get file
+	download multiple file
+		mget file
+		
+	bye
