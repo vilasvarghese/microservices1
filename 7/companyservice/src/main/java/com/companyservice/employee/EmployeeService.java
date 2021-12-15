@@ -21,7 +21,7 @@ public class EmployeeService {
 
 	
 	public Optional<Employee> getEmployee(int id) {
-		return employeeDAORepository.findById(Integer.toString(id));
+		return employeeDAORepository.findById(id);
 	}
 	
 	public void createEmployee(Employee employee) {
@@ -32,7 +32,7 @@ public class EmployeeService {
 		employeeDAORepository.save(employee);
 	}
 	
-	public void deleteEmployee(String id) {
+	public void deleteEmployee(int id) {
 		employeeDAORepository.deleteById(id);
 	}
 }

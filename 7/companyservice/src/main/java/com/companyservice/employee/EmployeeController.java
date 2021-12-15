@@ -51,7 +51,7 @@ public class EmployeeController {
 	
 	
 	@RequestMapping(method=RequestMethod.DELETE, value="/employees/{id}")
-	public void deleteEmployee(@PathVariable String id){
+	public void deleteEmployee(@PathVariable int id){
 		System.out.println("Inside deleteEmployee");
 		employeeService.deleteEmployee(id);
 	}
