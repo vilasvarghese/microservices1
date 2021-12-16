@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import java.util.List;
 
+
 @RestController
 public class CollaborationController {
 
