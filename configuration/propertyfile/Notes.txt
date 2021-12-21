@@ -148,8 +148,9 @@ Restart the server
 Hit the various end points.
 
 
-Another way to inject profile is as follows.
 
+Another way to inject profile is as follows.
+mvn install 
 java -jar configservice-0.0.1-SNAPSHOT.war --spring.profiles.active=dev
 
 
