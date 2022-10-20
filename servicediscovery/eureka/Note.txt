@@ -1,1 +1,5 @@
 Refer D:\PraiseTheLord\HSBGInfotech\Others\vilas\microservices\training\day3\EurekaServiceDiscovery
+
+
+Run a service on different port using 
+java -jar .\target\rating-0.0.1-SNAPSHOT.jar --server.port=8095

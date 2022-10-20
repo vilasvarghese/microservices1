@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.hsbg.microservices1</groupId>
-	<artifactId>microservices1</artifactId>
+	<artifactId>sleuth-nozipkin-microservices3</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>microservices1</name>
+	<name>sleuth-nozipkin-microservices3</name>
 	<description>Instructions Sleuth and Zipkin</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

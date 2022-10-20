@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
+//import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+//import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import java.util.List;
 
 
@@ -21,7 +21,7 @@ public class CollaborationController {
 	private RestTemplate restTemplate;
 	
 	@RequestMapping("/catalog/hello")
-	@HystrixCommand(fallbackMethod = "fallbackHello")
+	//@HystrixCommand(fallbackMethod = "fallbackHello")
 	public String collabHello() {
 		return restTemplate.getForObject("http://COMPANYSERVICE/helloInCompanies", String.class);
 	}
@@ -31,7 +31,7 @@ public class CollaborationController {
 	}
 	
 	@RequestMapping("/catalog/companies/{companyName}")
-	@HystrixCommand(fallbackMethod = "fallbackEmployeeRating")
+	//@HystrixCommand(fallbackMethod = "fallbackEmployeeRating")
 	public List<EmployeeRatingCatalog> getEmployeesRating(@PathVariable String companyName){
 		System.out.println("inside getEmployeesRating");
 		CompanyEmployees compEmps = restTemplate.getForObject("http://COMPANYSERVICE/companies/"+companyName+"/employees", CompanyEmployees.class);

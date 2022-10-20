@@ -378,3 +378,6 @@ D:\PraiseTheLord\HSBGInfotech\Others\vilas\microservices1\configuration\property
 Further read 
 Securing config server
 	https://medium.com/@susindaperera/securing-spring-cloud-config-server-eac7b46f3e41
+
+
+java -jar .\target\rating-0.0.1-SNAPSHOT.jar --server.port=8095

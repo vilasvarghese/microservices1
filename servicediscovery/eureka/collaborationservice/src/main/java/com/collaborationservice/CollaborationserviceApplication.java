@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
  
 @SpringBootApplication
 @EnableEurekaClient
-@EnableCircuitBreaker
+//@EnableCircuitBreaker
 public class CollaborationserviceApplication {
 
 	public static void main(String[] args) {

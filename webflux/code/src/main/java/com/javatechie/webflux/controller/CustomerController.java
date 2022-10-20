@@ -25,8 +25,8 @@ public class CustomerController {
     }
 
     //Webflux
+    //Try this in edge
     @GetMapping(value = "/stream",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    //@GetMapping(value = "/stream")
     public Flux<Customer> getAllCustomersStream() {
         return service.loadAllCustomersStream();
     }

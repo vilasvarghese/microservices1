@@ -9,14 +9,14 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.hsbg.microservices1</groupId>
-	<artifactId>microservices1</artifactId>
+	<artifactId>sleuth-with-zipkin-microservices3</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>microservices1</name>
+	<name>sleuth-with-zipkin-microservices3</name>
 	<description>Instructions Sleuth and Zipkin</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>1.8</java.version>
+		<java.version>17</java.version>
 		<spring-cloud.version>2020.0.1</spring-cloud.version>
 	</properties>
 	<dependencies>
