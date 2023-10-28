@@ -25,6 +25,7 @@ N.B:
 		<dependency>
 		    <groupId>io.github.resilience4j</groupId>
 		    <artifactId>resilience4j-spring-boot2</artifactId>
+			<version>1.7.1</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator -->
 		<dependency>
@@ -47,6 +48,9 @@ Update the collaboration controller as follows
 ------------------------------------------------------------------------
 1. Add an annotation to the method were we wan't to induce circuit breaker
 	@CircuitBreaker(name = "COMPANY-RATING-COLLABORATION", fallbackMethod = "fallbackEmpRating")
+
+	Add
+	import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 
 2. 	Add a fallback method as mentioned below.
 	The signature of this method should be same as what initial method.
@@ -75,6 +79,8 @@ Now let's learn half opened state
 
 Add the following properties in application.yml of collaboration service.
 -----------------------------------------------------
+#To understand what is happening below.
+#Documentation reference: https://resilience4j.readme.io/docs/circuitbreaker
 
 #Reference: https://github.com/resilience4j/resilience4j-spring-boot2-demo/blob/master/src/main/resources/application.yml
 resilience4j.circuitbreaker:

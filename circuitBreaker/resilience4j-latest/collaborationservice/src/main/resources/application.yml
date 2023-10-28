@@ -1,0 +1,24 @@
+resilience4j.circuitbreaker:
+  configs:
+    default:                       #Instead of this we can use instances: and mention a particular microservice name. The name should match with the name in @CircuitBreaker
+      registerHealthIndicator: true
+      eventConsumerBufferSize: 10
+      automaticTransitionFromOpenToHalfOpenEnabled: true #Start short circuiting for 50% requests. Don't even make calls.'
+      failureRateThreshold: 50      #Maximum failure rate threashhold in percentage. After this short circuiting will start.
+      minimumNumberOfCalls: 5       #After so many call failure, the short circuiting calculation would start.
+      permittedNumberOfCallsInHalfOpenState: 3
+      slidingWindowSize: 10
+      waitDurationInOpenState: 5s
+      slidingWindowType: COUNT_BASED
+
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
