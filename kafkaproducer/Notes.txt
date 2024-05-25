@@ -1,0 +1,243 @@
+Reference: 
+	https://devapo.io/blog/technology/kafka-in-spring-boot-on-docker/
+	
+docker-compose.yml 
+
+version: '3'
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+    - "2181:2181"
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+    - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+
+
+
+-------------
+
+docker compose up -d 
+docker ps 
+
+
+		This can be improved to look like https://medium.com/@akshat.available/kafka-with-spring-boot-using-docker-compose-1552cccaec8e
+			This will give us the UI too..
+			But a direct change will not work .
+			
+			
+
+		KAFKA_ADVERTISED_HOST_NAME 
+			→ enter the IP of the docker host (no change required) if it is remote
+
+		KAFKA_ZOOKEEPER_CONNECT 
+			→ give the port on which the zookeeper cluster is monitoring
+
+		KAFKA_AUTO_CREATE_TOPICS_ENABLE: 
+			→ we don’t want Kafka to create topics automatically, 
+			so we set the value to ‘false’. Later in the article, we will create them ourselves, using the Spring Boot application.
+
+Create a spring boot project from 
+	https://start.spring.io/	  
+	
+	project build type: maven 
+	spring boot: 2.4.3
+	packaging: jar 
+	java: 11
+	
+	dependencies: 
+		Spring for Apache Kafka 
+		Spring web
+		
+		
+		
+POJO class
+1. 
+
+package com.vilaskafkaproducer.kafkaproducer;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class Account {
+	
+    private String holder;
+    private String funds;
+    public Account(
+            @JsonProperty String holder,
+            @JsonProperty String funds) {
+        this.holder = holder;
+        this.funds = funds;
+    }
+    public Account() {
+    }
+    public String getHolder() {
+        return holder;
+    }
+    public void setHolder(String holder) {
+        this.holder = holder;
+    }
+    public String getFunds() {
+        return funds;
+    }
+    public void setFunds(String funds) {
+        this.funds = funds;
+    }
+
+}
+
+
+
+
+2. 
+
+package com.vilaskafkaproducer.kafkaproducer;
+
+
+import org.apache.kafka.clients.admin.NewTopic;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.serialization.StringSerializer;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.core.DefaultKafkaProducerFactory;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.support.serializer.JsonSerializer;
+import java.util.HashMap;
+import java.util.Map;
+
+@Configuration
+public class Producer {
+    final KafkaProperties kafkaProperties;
+    public Producer(KafkaProperties kafkaProperties) {
+        this.kafkaProperties = kafkaProperties;
+    }
+
+    @Bean
+    public Map<String, Object> producerConfiguration() {
+        Map<String, Object> properties = new HashMap<>(kafkaProperties.buildProducerProperties());
+        properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        return properties;
+    }
+    
+    @Bean
+    ProducerFactory<String, Object> producerFactory() {
+        return new DefaultKafkaProducerFactory<>(producerConfiguration());
+    }
+    
+    @Bean
+    KafkaTemplate<String, Object> kafkaTemplate() {
+        return new KafkaTemplate<>(producerFactory());
+    }
+    
+    @Bean
+    public NewTopic topic() {
+        return new NewTopic("transaction-1", 2, (short) 1);
+    }
+}
+
+
+
+3. 
+
+package com.vilaskafkaproducer.kafkaproducer;
+
+import org.apache.kafka.common.serialization.StringDeserializer;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
+import org.springframework.kafka.core.ConsumerFactory;
+import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.support.serializer.JsonDeserializer;
+
+@org.springframework.context.annotation.Configuration
+public class Consumer {
+
+    final KafkaProperties kafkaProperties;
+    public Consumer(KafkaProperties kafkaProperties) {
+        this.kafkaProperties = kafkaProperties;
+    }
+    @Bean
+    ConsumerFactory<String, Object> consumerFactory() {
+        final JsonDeserializer<Object> jsonDeserializer = new JsonDeserializer<>();
+        jsonDeserializer.addTrustedPackages("*");
+        return new DefaultKafkaConsumerFactory<>(kafkaProperties.buildConsumerProperties(), new StringDeserializer(), jsonDeserializer);
+    }
+    @Bean
+    ConcurrentKafkaListenerContainerFactory<String, Object> kafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, Object> concurrentKafkaListenerContainerFactory
+                = new ConcurrentKafkaListenerContainerFactory();
+        concurrentKafkaListenerContainerFactory.setConsumerFactory(consumerFactory());
+        return concurrentKafkaListenerContainerFactory;
+    }
+	
+}
+
+
+
+
+4. 
+
+
+package com.vilaskafkaproducer.kafkaproducer;
+
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RequestMapping ("/api/kafka")
+@RestController
+public class KafkaController {
+
+	
+
+    final KafkaTemplate kafkaTemplate;
+    Logger logger = LoggerFactory.getLogger(KafkaController.class);
+    public KafkaController(KafkaTemplate kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
+    /*public KafkaController() {
+        this.kafkaTemplate = null;
+    }*/
+    @PostMapping
+    public String sentMessage(@RequestBody Account account) {
+        this.kafkaTemplate.send("transaction-1", new Account(account.getHolder(), account.getFunds()));
+        return "Hello World!";
+    }
+    @KafkaListener(topics = "transaction-1")
+    public void listener(@Payload Account account,  ConsumerRecord<String, Account> cr) {
+        logger.info("Topic [transaction-1] Received message from {} with {} PLN ", account.getHolder(), account.getFunds());
+        logger.info(cr.toString());
+    }
+}
+
+
+
+
+
+
+
+
+
+POST https://ip:8081/api/kafka
+Content-Type: application/json
+Accept: application/json
+
+{
+"holder": "Tonny",
+"funds": "2000"
+}
