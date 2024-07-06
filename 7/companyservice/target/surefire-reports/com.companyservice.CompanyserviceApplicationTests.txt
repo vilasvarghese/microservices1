@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.companyservice.CompanyserviceApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 39.134 s - in com.companyservice.CompanyserviceApplicationTests
