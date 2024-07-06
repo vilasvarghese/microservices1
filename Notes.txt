@@ -1388,7 +1388,7 @@ Zookeeper
 
 
 
-Detailed introduction 
+Detailed introduction 	
 	https://kafka.apache.org/documentation/
 	https://kafka.apache.org/documentation/#gettingStarted
 

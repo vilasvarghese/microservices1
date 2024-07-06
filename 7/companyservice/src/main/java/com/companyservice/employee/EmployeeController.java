@@ -56,8 +56,8 @@ public class EmployeeController {
 		employeeService.deleteEmployee(id);
 	}
 	
-	@RequestMapping(method=RequestMethod.POST, value="/seedData")
-	public void seedData(){
+	@RequestMapping(method=RequestMethod.GET, value="/seedData")
+	public String seedData(){
 		companyService.addCompany(new Company("Hexaware", "Hexaware India Pvt Ltd", 22000));
 		companyService.addCompany(new Company("Apple", "Apple India Pvt Ltd", 10000));
 		companyService.addCompany(new Company("Infosys", "Infosys India Pvt Ltd", 5000));
@@ -73,5 +73,7 @@ public class EmployeeController {
 
 		employeeService.createEmployee(new Employee(8, "Bill Gates", 1, "Infosys"));
 		employeeService.createEmployee(new Employee(9, "Trump the president", 2, "Infosys"));
+		
+		return "Data seeded successfully!!!";
 	}
 }
