@@ -1,5 +1,15 @@
 Refer D:\PraiseTheLord\HSBGInfotech\Others\vilas\microservices\training\day3\EurekaServiceDiscovery
 
+Server
+------
+Add the below dependencies 
+	Cloud bootstrap
+	Euereka server 
+
+		spring-cloud-starter 
+		netflix-eureka
+
+
 
 Run a service on different port using 
 java -jar .\target\rating-0.0.1-SNAPSHOT.jar --server.port=8095

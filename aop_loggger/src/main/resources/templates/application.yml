@@ -1,0 +1,4 @@
+logging:
+  level:
+    com.idfc.aop.logger: INFO
+    org.springframework.web: INFO
