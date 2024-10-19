@@ -1,0 +1,395 @@
+Dockerization 
+eureka
+api gateway
+synchronization 
+config server 
+aysnc services and sync services 
+
+
+show?
+	filter service communication 
+	security on api gateway 
+	load balancer 
+		@RestTemplate 
+		inter service communication pending
+	k8s deployment 
+	
+	7:15 call with client
+	
+ask 
+---	
+	Reactive ms 
+		Spring boot reactive - webflux 
+	Cross cutting concerns
+		ELK stack 
+	Brief of mongo db 
+	Design patterns and best practices
+	Containerize and deploy on k8s 
+		eks 
+	Testable?
+		given time limitation 
+		instead 
+			at every lavel 
+				unit 
+				component 
+				integration 
+				system 
+					junit 
+			need not cover 		
+			ask in training 
+				not go in depth 
+	
+	use airline ticketing system 
+		our concern on security 
+		3rd party communication 
+	
+what is covered (3 days)
+---------------
+	ms architecture 
+		dockers
+	basic architecture
+	overview of mongo 
+	use case 
+		airline ticketing system use case 
+		high level design 
+	shared set of docker services 
+		docker compose files 
+	core use cases 
+	worked with 
+		mongo db 
+		mysql 
+	
+3 levels of communication 
+	grpc 
+	rest 
+	rabbitmq
+	explained config server 
+	
+	
+Remaining 2 days (Pending)
+-------------------------
+1. Has queries on mongodb 
+2. Overview of design patterns
+	implement cqrs and saga's 
+		explanation of code 
+		
+3. implement ELK stack 
+4. split ms btw trainees and work on them 
+	complex ones the trainer 
+
+	communication 
+		grpc 
+		rest
+		rabbitmq 
+	graphana and prometheus 
+	docker basics - k8s overview
+		last 2 hours 
+		
+	junit not at all covered
+		share the ccode 
+		
+		
+		---------------------
+		
+		
+[7:59 PM] Maganti, Bhanu Sameera (DI SW PLM STS SDDEV SYS APPL SDM)
+Original proposal
+
+==================
+
+1. Reactive microservices = spring reactive - webflux
+2. cross cutting concerns - ELK stack
+3. brief overview of mngo db
+4. design patterns and best practices
+5. deploy on aws
+6. at every level - unit, component, integration , system junit
+7. one usecase airline ticketing system - 3 red party
+
+What was complete
+
+==================
+
+1. microservices architecture -dockers - basic architecture
+2. mongo db
+3. airline ticketing usecase - he shared us the HLD   shared set of docker services (mongo as well as MYsql) 
+roadmap
+
+
+TBD
+========
+1. mongodb query session, doubt clarification.
+	--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+2. quick overview of microservices design pattrens
+	Saga
+		https://www.youtube.com/watch?v=aOen1-pQLZg
+		https://github.com/PouyaPouryaie/saga-choreography-example
+	cqrs
+		https://www.youtube.com/watch?v=aOen1-pQLZg
+		https://www.youtube.com/watch?v=fzGZPf0FMao&list=PLxyW5_t6ZU9MVl5kYTN3yZ5AKwQaczMdz
+		
+		--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+3. ELK stack
+	https://www.youtube.com/watch?v=5s9pR9UUtAU
+		--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+4. to split the microservices between the trainees and to work on them and complex ons with the trainer
+	-> grpc
+		https://www.youtube.com/watch?v=2CWYorTWyGs
+	->rest
+	-> rabbitmq
+		https://www.youtube.com/watch?v=TvxhuAUJGUg&list=PLGRDMO4rOGcMh2fAMOnwuBMDa8PxiKWoN&index=1
+		https://www.youtube.com/watch?v=1PzD85OONTA&list=PLGRDMO4rOGcMh2fAMOnwuBMDa8PxiKWoN&index=6
+		 docker pull rabbitmq:4.0.2-management
+		 docker run --rm -it -p 15672:15672 -p 5672:5672 rabbitmq:4.0.2-management
+		 localhost:15672
+			login using guest/guest
+			create exchange 	
+				name: exchange_demo
+				type: direct
+				durability: durable 
+				auto delete: no 
+				Internal: No 
+				
+				Add exchange 
+			create queue 
+				type: classic
+				name: queue_demo
+				durability: durable 
+				auto delete: no 
+			back to exchange 
+				click on exchange 
+				add binding from this exchange to queue 
+					to queue: queue_demo
+					routing queue: routing_key_demo 
+			back to queue 
+				click on queue created 
+				confirm if it has got bound
+			back to exchange 
+				publish message 
+				routing key: routing_key_demo
+				payload: hello world 
+					publish message 
+					
+			back to queue_demo	
+				get message 
+				
+	
+		spring boot 
+			maven 
+			java 
+			3.3.4
+			java 17
+			jar 
+			
+			dependency 
+				spring for rabbitmq
+					dependency name: spring amqp 
+				spring web
+		
+Reference: 
+https://www.geeksforgeeks.org/spring-boot-rabbitmq-configuration/	
+
+dependencies 
+--------
+<dependencies>
+    <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-amqp</artifactId>
+    </dependency>
+</dependencies>
+
+
+application.properties
+--------	
+spring.rabbitmq.host=localhost
+spring.rabbitmq.port=5672
+spring.rabbitmq.username=guest
+spring.rabbitmq.password=guest
+
+
+ application.yml 
+-------
+spring:
+       rabbitmq:
+               host:localhost
+               port:5672
+               username:username
+               password:password 
+			   
+
+In config 
+ @Bean 
+ public TopicExchange exchange()
+    {
+        return new TopicExchange("exchange-name");
+    }		
+
+Spring boot automatically configures 
+		ConnectionFactory
+		RabbitTemplate 
+		RabbitAdmin 
+		
+		
+Producer can be @Service 
+
+RabbitMQTemplate is automatically configured by SpringBoot 
+
+
+Write a controller 
+	
+	private RabbitMQProducer producer;
+	
+	constructor(RabbitMQProducer producer){
+		this.producer = producer;
+	}
+	
+	/publish
+	producer.sendMessage(message)
+	
+			   --------------------------------------------------------------------------------
+	
+	
+Detailed Overview of RabbitMQ
+=============================
+RabbitMQ 
+	open-source message broker 
+	facilitates communication between applications or components by managing message delivery in distributed systems. It provides robust messaging services, ensuring messages are safely queued and routed across multiple systems, allowing them to work asynchronously. This overview covers RabbitMQ's architecture, features, use cases, message flow, and more.
+
+1. What is RabbitMQ?
+RabbitMQ is a message broker that supports the Advanced Message Queuing Protocol (AMQP), a protocol that allows different software applications to communicate with each other asynchronously by sending and receiving messages. RabbitMQ decouples the producer (message sender) and the consumer (message receiver), ensuring that each message is delivered securely and reliably.
+
+Core Features:
+Message Queuing: Stores and forwards messages in queues.
+Decoupling: Allows systems to communicate independently of each other.
+Routing: Routes messages between producers and consumers using exchanges and bindings.
+Reliability: Messages can persist across system restarts.
+Concurrency: Supports multiple consumers to handle messages concurrently.
+2. Architecture of RabbitMQ
+RabbitMQ’s architecture follows a highly scalable and flexible model, supporting complex messaging patterns.
+
+Key Components:
+Producer: The component that creates messages and sends them to exchanges.
+Exchange: The core routing component that receives messages from producers and routes them to queues based on routing rules (bindings).
+Queue: Stores messages until they are processed by consumers.
+Consumer: Receives and processes messages from the queue.
+Bindings: Links between exchanges and queues. These define how the exchange should route messages to the queue.
+Connection and Channels: 
+	Clients communicate with RabbitMQ through TCP connections, 
+	each connection 
+		can have multiple logical channels 
+			to communicate simultaneously.
+Types of Exchanges:
+Direct Exchange: Routes messages based on the exact match between the routing key and binding key.
+Topic Exchange: Routes messages based on wildcard patterns in the routing key.
+Fanout Exchange: Broadcasts all messages to every queue bound to the exchange.
+Headers Exchange: Routes messages based on headers instead of routing keys.
+3. RabbitMQ Message Flow
+The flow of messages in RabbitMQ follows a structured process to ensure secure and reliable communication.
+
+Message Publishing: A producer sends a message to an exchange along with a routing key.
+Exchange Processing: The exchange uses the routing key and predefined rules (bindings) to determine which queue(s) should receive the message.
+Message Enqueueing: The message is placed into the target queue(s).
+Message Consumption: Consumers listen to specific queues. They receive messages from the queues and process them.
+RabbitMQ supports acknowledgments to ensure the reliable delivery of messages. After processing, the consumer can acknowledge a message to RabbitMQ, confirming its successful delivery. In case of failure, the message can be requeued or routed to a dead-letter queue.
+
+4. Persistence and Reliability in RabbitMQ
+RabbitMQ ensures message durability and reliability through the following mechanisms:
+
+1. Message Persistence:
+Messages in RabbitMQ can be persisted to disk to ensure they are not lost in the event of a broker crash or system restart. For message persistence, two aspects are important:
+
+Persistent Messages: Marking messages as persistent ensures they are stored on disk.
+Durable Queues: Declaring queues as durable ensures they survive a broker restart.
+2. Acknowledgment and Redelivery:
+Consumers must acknowledge the successful receipt and processing of messages. If a consumer fails to acknowledge a message, RabbitMQ can requeue or redeliver it to another consumer, ensuring no message is lost.
+
+3. High Availability:
+RabbitMQ can run in clustered mode, where multiple RabbitMQ nodes are deployed to ensure high availability. The cluster replicates data between nodes, offering fault tolerance. In case of a node failure, other nodes continue to serve clients without disruption.
+
+5. RabbitMQ vs. Other Messaging Systems
+RabbitMQ is often compared to other message brokers like Apache Kafka, ActiveMQ, and Redis. While each system has its strengths, RabbitMQ is ideal for applications that need strong routing, flexible delivery guarantees, and reliable message queuing.
+
+RabbitMQ vs. Kafka:
+Use Case: RabbitMQ is suited for transactional, low-latency messaging and task queues, while Kafka is used for high-throughput event streaming.
+Message Delivery: RabbitMQ supports complex routing and reliable message delivery, whereas Kafka focuses on event streaming and partitioning for high-scale data ingestion.
+RabbitMQ vs. Redis:
+Redis, while supporting basic queuing, is an in-memory key-value store optimized for caching and fast operations, making it less reliable for persistent messaging scenarios.
+
+6. Use Cases for RabbitMQ
+RabbitMQ is highly versatile and can be used in various scenarios:
+
+1. Microservices Communication:
+RabbitMQ is often used in microservices architectures to enable asynchronous communication between different services, enhancing system resilience and scalability.
+
+2. Task Queues:
+In systems where background tasks need to be processed (e.g., email notifications, video processing), RabbitMQ acts as an intermediary to ensure tasks are queued and processed by consumers at their own pace.
+
+3. Event-Driven Architectures:
+RabbitMQ facilitates event-driven systems by allowing services to publish events (e.g., order placed) to a message broker, which routes the events to interested consumers.
+
+4. Load Balancing:
+RabbitMQ can distribute messages evenly among multiple consumers, allowing systems to scale horizontally as the number of tasks increases.
+
+5. Data Pipelines:
+In real-time data processing pipelines, RabbitMQ is used to buffer and route data between different stages of processing, ensuring that each stage receives data in the right order.
+
+7. Security and Authentication in RabbitMQ
+Security is an essential aspect of any message broker, and RabbitMQ provides several mechanisms to ensure secure communication:
+
+1. Authentication:
+RabbitMQ uses a username/password-based authentication system. It also supports external authentication mechanisms like LDAP and OAuth2.
+
+2. Authorization:
+Once authenticated, RabbitMQ enforces permissions on which exchanges, queues, and virtual hosts a user can access. Role-based access control (RBAC) ensures only authorized users can perform actions like publishing or consuming messages.
+
+3. Encryption:
+RabbitMQ supports TLS/SSL encryption to secure messages as they traverse between producers, brokers, and consumers.
+
+8. Monitoring and Management of RabbitMQ
+RabbitMQ provides a robust management interface and plugins to monitor and manage the system:
+
+1. Management Plugin:
+The management plugin allows users to view message rates, connections, channels, queues, and exchanges through an intuitive web interface. It also allows administrators to send messages, inspect queues, and control RabbitMQ nodes.
+
+2. Monitoring Tools:
+RabbitMQ integrates with monitoring tools like Prometheus and Grafana, which allow real-time tracking of performance metrics like queue length, message rates, and system load.
+
+3. Log Management:
+Logs in RabbitMQ can be configured to capture events at different levels (error, warning, info), providing insights into system behavior and troubleshooting issues.
+
+9. RabbitMQ Best Practices
+To get the best performance and reliability from RabbitMQ, consider the following best practices:
+
+1. Use Durable Queues and Persistent Messages:
+Ensure that queues and messages are marked as durable and persistent to prevent data loss in case of broker failure.
+
+2. Load Balancing Consumers:
+Distribute the workload across multiple consumers to ensure messages are processed quickly, especially in high-throughput environments.
+
+3. Dead-Letter Queues (DLQ):
+Use dead-letter queues to capture messages that cannot be delivered or processed, allowing for later analysis and debugging.
+
+4. Monitor System Performance:
+Regularly monitor queue lengths, message rates, and consumer performance to identify potential bottlenecks.
+
+5. Manage Connections Efficiently:
+Close unused connections and channels to conserve resources, especially in environments with many producers and consumers.
+
+10. Conclusion
+RabbitMQ is a powerful and flexible message broker that provides asynchronous messaging, reliable message delivery, and scalable communication for modern distributed applications. Its robust feature set, combined with high availability, durability, and complex routing capabilities, make it a popular choice for handling communication in microservices architectures, real-time data processing pipelines, and task queues.
+
+RabbitMQ’s strengths lie in its support for various messaging patterns, fault tolerance mechanisms, and ease of integration with different programming languages and frameworks. By following best practices, developers can ensure RabbitMQ performs optimally, supporting the needs of both small and large-scale systems.
+	
+--------------------------------------------------------------------------------	
+			
+
+5. graphna and prometheus
+	https://www.youtube.com/watch?v=2wr9njNdywk
+	--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+6. docker basics 
+6 kubernetes overview and cloud deployment		
+	--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
