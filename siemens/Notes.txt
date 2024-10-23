@@ -29,7 +29,7 @@ ask
 	Testable?
 		given time limitation 
 		instead 
-			at every lavel 
+			at every level 
 				unit 
 				component 
 				integration 
@@ -79,6 +79,7 @@ Remaining 2 days (Pending)
 
 	communication 
 		grpc 
+			https://www.youtube.com/watch?v=4onJ94fz8s4&list=PLZnMNSr-VrIgy2S06kDKdlq4FueU84oec
 		rest
 		rabbitmq 
 	graphana and prometheus 
@@ -86,7 +87,7 @@ Remaining 2 days (Pending)
 		last 2 hours 
 		
 	junit not at all covered
-		share the ccode 
+		share the code 
 		
 		
 		---------------------
@@ -118,25 +119,38 @@ roadmap
 TBD
 ========
 1. mongodb query session, doubt clarification.
-	--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 2. quick overview of microservices design pattrens
 	Saga
 		https://www.youtube.com/watch?v=aOen1-pQLZg
 		https://github.com/PouyaPouryaie/saga-choreography-example
-	cqrs
-		https://www.youtube.com/watch?v=aOen1-pQLZg
-		https://www.youtube.com/watch?v=fzGZPf0FMao&list=PLxyW5_t6ZU9MVl5kYTN3yZ5AKwQaczMdz
 		
+		refer RabbitMQ section 
+		
+	cqrs
+		https://www.youtube.com/watch?v=fzGZPf0FMao&list=PLxyW5_t6ZU9MVl5kYTN3yZ5AKwQaczMdz
+			https://github.com/Java-Techie-jt/cqrs-design-pattern
+			
 		--------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 3. ELK stack
 	https://www.youtube.com/watch?v=5s9pR9UUtAU
-		--------------------------------------------------------------------------------
+	https://medium.com/cloud-native-daily/elk-spring-boot-a-guide-to-local-configuration-b6d9fa7790f6
+	https://www.javainuse.com/spring/springboot-microservice-elk	
+	
+	https://www.youtube.com/watch?v=hvYUwUmHB6M
+	
+	--------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 4. to split the microservices between the trainees and to work on them and complex ons with the trainer
 	-> grpc
+		worked 
+			https://www.youtube.com/watch?v=yK6QVODzPDU
+			https://www.javainuse.com/boot3/grpc
 		https://www.youtube.com/watch?v=2CWYorTWyGs
+		https://www.youtube.com/watch?v=4onJ94fz8s4&list=PLZnMNSr-VrIgy2S06kDKdlq4FueU84oec
+		
 	->rest
 	-> rabbitmq
 		https://www.youtube.com/watch?v=TvxhuAUJGUg&list=PLGRDMO4rOGcMh2fAMOnwuBMDa8PxiKWoN&index=1
@@ -209,15 +223,6 @@ spring.rabbitmq.username=guest
 spring.rabbitmq.password=guest
 
 
- application.yml 
--------
-spring:
-       rabbitmq:
-               host:localhost
-               port:5672
-               username:username
-               password:password 
-			   
 
 In config 
  @Bean 
@@ -386,7 +391,9 @@ RabbitMQ’s strengths lie in its support for various messaging patterns, fault 
 			
 
 5. graphna and prometheus
-	https://www.youtube.com/watch?v=2wr9njNdywk
+	https://www.youtube.com/watch?v=pVdDWQQeqME
+	https://www.youtube.com/watch?v=pVdDWQQeqME
+	https://medium.com/simform-engineering/revolutionize-monitoring-empowering-spring-boot-applications-with-prometheus-and-grafana-e99c5c7248cf
 	--------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 6. docker basics 
