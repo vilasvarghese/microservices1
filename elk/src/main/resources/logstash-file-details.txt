@@ -1,0 +1,8 @@
+Logstash Appender: 
+	Defines a LogstashTcpSocketAppender to send logs to localhost:5000.
+Encoder: 
+	Encodes log messages in JSON format using the LoggingEventCompositeJsonEncoder, with various providers for metadata (MDC, context, log level, logger name, etc.).
+Custom Pattern: 
+	Includes a custom field "app": "test-log" for identifying the application.
+Root Logger: 
+	Configures the root logger to log messages at the info level and send them to Logstash.
