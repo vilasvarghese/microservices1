@@ -1,3 +1,5 @@
+//https://medium.com/microsoftazure/create-azure-function-with-spring-cloud-function-ab150216d2bd
+
 package com.collaborationservice;
 
 import org.springframework.boot.SpringApplication;

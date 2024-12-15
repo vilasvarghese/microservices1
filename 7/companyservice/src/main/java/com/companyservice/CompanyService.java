@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;import com.companyservice.employee
 
 @Service
 public class CompanyService {
+	
+	static int count = 0;
 
 	@Autowired
 	private CompanyDAORepository companyDAORepository;
@@ -27,8 +29,21 @@ public class CompanyService {
 			new Company("MI", "MobileIron India Pvt Ltd.", 850)
 		);*/
 	}
+	
+	private void addDelay(){
+		try{
+			Thread.sleep(5000);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
 
 	public Optional<Company> getCompany(String name) {
+		System.out.println("count "+count);
+		count++;
+		if (count %10 ==0){
+			addDelay();
+		}
 		return companyDAORepository.findById(name);
 	}
 	

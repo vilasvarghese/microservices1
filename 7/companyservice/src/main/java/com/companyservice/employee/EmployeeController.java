@@ -15,14 +15,31 @@ import com.companyservice.CompanyService;
 
 @RestController
 public class EmployeeController {
+	private static int counter;
 
 	@Autowired
 	private EmployeeService employeeService;
 	@Autowired
 	private CompanyService companyService;
 	
+	public void delay(){
+		try{
+			Thread.sleep(10000);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+	}
+	
 	@RequestMapping("/companies/{companyName}/employees")
 	public CompanyEmployees getEmployees(@PathVariable String companyName){
+		
+		counter++;
+		if (counter %10 == 0){
+			delay();
+		}
+		
+		
 		CompanyEmployees compEmployees = new CompanyEmployees();
 		compEmployees.setEmployeeList(employeeService.getAllEmployees(companyName));	
 		return compEmployees;
